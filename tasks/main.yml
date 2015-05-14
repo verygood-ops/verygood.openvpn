@@ -1,0 +1,37 @@
+---
+# tasks file for openvpn
+
+- name: install openvpn
+  apt: name={{ item }} state=present
+  with_items:
+    - openvpn
+    - easy-rsa
+    - iptables-persistent
+
+- name: Ensure group 'nogroup' is present
+  group: name=nogroup state=present
+
+- name: Setup server keys
+  include: server_keys.yml
+  tags:
+    - server_keys
+
+- name: copy openvpn config file
+  template: src=server.conf.j2 dest=/etc/openvpn/{{openvpn_config_file}}.conf owner=root group=root
+  notify:
+    - restart openvpn
+
+- name: enable ipv4 forwarding
+  sysctl: name=net.ipv4.ip_forward value=1
+
+- name: Add port rules (iptables)
+  include: iptables.yml
+
+- name: generate client configs
+  include: client_keys.yml
+  when: clients
+  tags:
+    - client_keys
+
+- name: setup openvpn auto-start (init-style) & start
+  service: name={{openvpn_service_name}} enabled=yes state=started
