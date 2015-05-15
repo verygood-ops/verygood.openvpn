@@ -2,6 +2,7 @@
 # defaults file for verygood.openvpn
 openvpn_port: 1194
 openvpn_proto: udp
+openvpn_service_name: "openvpn"
 openvpn_config_file: "openvpn_{{ openvpn_proto }}_{{ openvpn_port }}"
 
 # aws vpc, lan, etc
