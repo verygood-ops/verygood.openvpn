@@ -26,6 +26,7 @@
 
 - name: Add port rules (iptables)
   include: iptables.yml
+  when: iptables_enabled == 'yes'
 
 - name: generate client configs
   include: client_keys.yml

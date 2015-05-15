@@ -6,3 +6,4 @@ openvpn_config_file: "openvpn_{{ openvpn_proto }}_{{ openvpn_port }}"
 
 # aws vpc, lan, etc
 virtual_private_cidr: "10.4.0.0/24"
+iptables_enabled: 'no'
