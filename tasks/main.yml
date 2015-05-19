@@ -11,6 +11,10 @@
 - name: Ensure group 'nogroup' is present
   group: name=nogroup state=present
 
+- name: Setup 2fa
+  include: setup_2fa.yml
+  when: openvpn_2fa_google == 'yes'
+
 - name: Setup server keys
   include: server_keys.yml
   tags:

@@ -37,3 +37,7 @@ group nogroup
 status openvpn-status.log
 log-append  /var/log/openvpn.log
 verb 3
+
+{% if openvpn_2fa_google == 'yes' %}
+plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so openvpn
+{% endif %}
