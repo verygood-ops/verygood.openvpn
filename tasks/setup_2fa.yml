@@ -1,0 +1,8 @@
+---
+- name: OpenVPN 2FA | Install Google Authenticator
+  apt: name={{ item }} state=present
+  with_items:
+    - libpam-google-authenticator
+
+- name: OpenVPN 2FA | Add pam login
+  template: src=pam-openvpn.conf.j2 dest=/etc/pam.d/openvpn owner=root group=root
