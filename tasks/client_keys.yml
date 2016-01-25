@@ -12,25 +12,25 @@
   with_items: clients
 
 - name: OpenVPN Client Keys | Generate client config
-  template: src=client.ovpn.j2 dest=/etc/openvpn/{{item}}-{{ansible_fqdn}}.ovpn owner=root group=root
+  template: src=client.ovpn.j2 dest=/etc/openvpn/{{item}}-{{cname}}.ovpn owner=root group=root
   with_items: clients
 
 - name: OpenVPN Client Keys | Fetch ca key
-  fetch: src=/etc/openvpn/keys/ca.crt dest=/tmp/ansible/{{item}}/{{ansible_fqdn}}/ca.crt flat=yes
+  fetch: src=/etc/openvpn/keys/ca.crt dest={{client_config_dest}}/{{item}}/{{cname}}/ca.crt flat=yes
   with_items: clients
 
 - name: OpenVPN Client Keys | Fetch tls-auth key
-  fetch: src=/etc/openvpn/keys/ta.key dest=/tmp/ansible/{{item}}/{{ansible_fqdn}}/ta.key flat=yes
+  fetch: src=/etc/openvpn/keys/ta.key dest={{client_config_dest}}/{{item}}/{{cname}}/ta.key flat=yes
   with_items: clients
 
 - name: OpenVPN Client Keys | Fetch client key
-  fetch: src=/etc/openvpn/keys/{{item}}.key dest=/tmp/ansible/{{item}}/{{ansible_fqdn}}/{{item}}.key flat=yes
+  fetch: src=/etc/openvpn/keys/{{item}}.key dest={{client_config_dest}}/{{item}}/{{cname}}/{{item}}.key flat=yes
   with_items: clients
 
 - name: OpenVPN Client Keys | Fetch client cert
-  fetch: src=/etc/openvpn/keys/{{item}}.crt dest=/tmp/ansible/{{item}}/{{ansible_fqdn}}/{{item}}.crt flat=yes
+  fetch: src=/etc/openvpn/keys/{{item}}.crt dest={{client_config_dest}}/{{item}}/{{cname}}/{{item}}.crt flat=yes
   with_items: clients
 
 - name: OpenVPN Client Keys | Fetch client config
-  fetch: src=/etc/openvpn/{{item}}-{{ansible_fqdn}}.ovpn dest=/tmp/ansible/{{item}}/{{ansible_fqdn}}/{{ansible_fqdn}}.ovpn flat=yes
+  fetch: src=/etc/openvpn/{{item}}-{{cname}}.ovpn dest={{client_config_dest}}/{{item}}/{{cname}}/{{cname}}.ovpn flat=yes
   with_items: clients

@@ -1,7 +1,7 @@
 client
 dev tun
 proto {{openvpn_proto}}
-remote {{ansible_ec2_public_ipv4}} {{openvpn_port}}
+remote {{ cname|default(ansible_ec2_public_ipv4) }} {{openvpn_port}}
 resolv-retry infinite
 nobind
 
