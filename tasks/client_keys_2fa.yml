@@ -1,0 +1,13 @@
+---
+
+- name: OpenVPN Client Keys | Generate client config
+  template: src=client.ovpn.j2 dest=/etc/openvpn/{{item}}-{{ansible_fqdn}}.ovpn owner=root group=root
+  with_items: clients
+
+- name: OpenVPN Client Keys | Fetch ca key
+  fetch: src=/etc/openvpn/keys/ca.crt dest={{client_config_dest}}/{{item}}/{{ansible_fqdn}}/ca.crt flat=yes
+  with_items: clients
+
+- name: OpenVPN Client Keys | Fetch client config
+  fetch: src=/etc/openvpn/{{item}}-{{ansible_fqdn}}.ovpn dest={{client_config_dest}}/{{item}}/{{ansible_fqdn}}/config-{{ansible_fqdn}}.ovpn flat=yes
+  with_items: clients

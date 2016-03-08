@@ -1,23 +1,13 @@
+# OpenVPN Server Config File
+#
 # {{ ansible_managed }}
 
-local {{ansible_default_ipv4.address}}
 port {{openvpn_port}}
 proto {{openvpn_proto}}
 dev tun
-
-ca keys/ca.crt
-cert keys/server.crt
-key keys/server.key
-dh keys/dh4096.pem
-tls-auth keys/ta.key 0
-
-tls-server
-cipher AES-256-CBC
-
-# This should be in the VPC subnet so it can access other machines in
-# the subnet
-server 10.4.240.0 255.255.255.0
-ifconfig-pool-persist ipp.txt
+keepalive 5 30
+comp-lzo
+local {{ansible_default_ipv4.address}}
 
 # Route only requests in the 10.4.0.0/16 subnet
 push "route 10.4.0.0 255.255.0.0"
@@ -27,17 +17,45 @@ push "route 10.4.0.0 255.255.0.0"
 # push "dhcp-option DNS 208.67.220.220"
 # push "dhcp-option DNS 8.8.8.8"
 # push "dhcp-option DNS 8.8.4.4"
-keepalive 5 30
-comp-lzo
-persist-key
-persist-tun
+
+# keys & certs
+ca       keys/ca.crt
+#----SECRET---VVVVVVVVV---
+key      keys/server.key
+#----SECRET---^^^^^^^^----
+cert     keys/server.crt
+dh       keys/dh4096.pem
+
+# This should be in the VPC subnet so it can access other machines in
+# the subnet
+server 10.4.240.0 255.255.255.0
+ifconfig-pool-persist ipp.txt
+
 user nobody
 group nogroup
 
+# avoid resetting connections on server restart
+persist-key
+persist-tun
+
+# current connections from clients
 status openvpn-status.log
+
+# logging settings
 log-append  /var/log/openvpn.log
-verb 3
+verb 3   # don't spam the log with *too* may messages.
+mute 10  # suppress identical messages > 10 occurrences
+
+# security negotiations
+reneg-sec 0
+script-security 1
 
 {% if openvpn_2fa_google == 'yes' %}
+client-cert-not-required
+username-as-common-name
 plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so openvpn
+{% else %}
+tls-auth keys/ta.key 0
+tls-server
+cipher AES-256-CBC
 {% endif %}
