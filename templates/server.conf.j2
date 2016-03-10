@@ -9,8 +9,16 @@ keepalive 5 30
 comp-lzo
 local {{ansible_default_ipv4.address}}
 
+
 # Route only requests in the 10.4.0.0/16 subnet
-push "route 10.4.0.0 255.255.0.0"
+#
+# Push routes to the client to allow it
+# to reach other private subnets behind
+# the server.  Remember that these
+# private subnets will also need
+# to know to route the OpenVPN client
+# address pool back to the OpenVPN server.
+push "route {{ virtual_private_cidr | ipaddr('network') }} 255.255.0.0"
 
 # push "redirect-gateway def1 bypass-dhcp"
 # push "dhcp-option DNS 208.67.222.222"
@@ -20,15 +28,36 @@ push "route 10.4.0.0 255.255.0.0"
 
 # keys & certs
 ca       keys/ca.crt
-#----SECRET---VVVVVVVVV---
-key      keys/server.key
-#----SECRET---^^^^^^^^----
+key      keys/server.key # <- secret! protect @ all costs
 cert     keys/server.crt
 dh       keys/dh4096.pem
 
-# This should be in the VPC subnet so it can access other machines in
-# the subnet
-server 10.4.240.0 255.255.255.0
+# This should be in the VPC subnet so it
+# can access other machines in the subnet.
+#
+# Configure server mode and supply a VPN subnet
+# for OpenVPN to draw client addresses from.
+# The server will take 10.8.0.1 for itself,
+# the rest will be made available to clients.
+# Each client will be able to reach the server
+# on the server subnet.
+#
+# Comment this line out if you are
+# ethernet bridging. See the man page for more info.
+#
+# If using the verygood.infra-* formations, you will
+# see that the maximum numer of availability zones
+# per subnet is 10. *Realistically*, this can be
+# 3. Let's assume modulus 5, that means from
+# there's a good chance 6 and 8 will be valid subnets.
+#
+# The OpenVPN server subnet, therefore, should start
+# at either 10.XXX.6.128/28 to 10.XXX.8.128/28 based on
+# the remote subnet where this playbook is running.
+#
+# I used this: http://www.subnet-calculator.com/cidr.php
+# to help calculate this.
+server {{ openvpn_server_subnet_seed | ipaddr('address') }} {{ openvpn_server_subnet_netmask }}
 ifconfig-pool-persist ipp.txt
 
 user nobody
