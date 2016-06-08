@@ -1,43 +1,90 @@
+# OpenVPN Server Config File
+#
 # {{ ansible_managed }}
 
-local {{ansible_default_ipv4.address}}
 port {{openvpn_port}}
 proto {{openvpn_proto}}
 dev tun
+keepalive 5 30
+comp-lzo
+local {{ansible_default_ipv4.address}}
 
-ca keys/ca.crt
-cert keys/server.crt
-key keys/server.key
-dh keys/dh4096.pem
-tls-auth keys/ta.key 0
-
-tls-server
-cipher AES-256-CBC
-
-# This should be in the VPC subnet so it can access other machines in
-# the subnet
-server 10.4.240.0 255.255.255.0
-ifconfig-pool-persist ipp.txt
 
 # Route only requests in the 10.4.0.0/16 subnet
-push "route 10.4.0.0 255.255.0.0"
+#
+# Push routes to the client to allow it
+# to reach other private subnets behind
+# the server.  Remember that these
+# private subnets will also need
+# to know to route the OpenVPN client
+# address pool back to the OpenVPN server.
+push "route {{ virtual_private_cidr | ipaddr('network') }} 255.255.0.0"
 
 # push "redirect-gateway def1 bypass-dhcp"
 # push "dhcp-option DNS 208.67.222.222"
 # push "dhcp-option DNS 208.67.220.220"
 # push "dhcp-option DNS 8.8.8.8"
 # push "dhcp-option DNS 8.8.4.4"
-keepalive 5 30
-comp-lzo
-persist-key
-persist-tun
+
+# keys & certs
+ca       keys/ca.crt
+key      keys/server.key # <- secret! protect @ all costs
+cert     keys/server.crt
+dh       keys/dh4096.pem
+
+# This should be in the VPC subnet so it
+# can access other machines in the subnet.
+#
+# Configure server mode and supply a VPN subnet
+# for OpenVPN to draw client addresses from.
+# The server will take 10.8.0.1 for itself,
+# the rest will be made available to clients.
+# Each client will be able to reach the server
+# on the server subnet.
+#
+# Comment this line out if you are
+# ethernet bridging. See the man page for more info.
+#
+# If using the verygood.infra-* formations, you will
+# see that the maximum numer of availability zones
+# per subnet is 10. *Realistically*, this can be
+# 3. Let's assume modulus 5, that means from
+# there's a good chance 6 and 8 will be valid subnets.
+#
+# The OpenVPN server subnet, therefore, should start
+# at either 10.XXX.6.128/28 to 10.XXX.8.128/28 based on
+# the remote subnet where this playbook is running.
+#
+# I used this: http://www.subnet-calculator.com/cidr.php
+# to help calculate this.
+server {{ openvpn_server_subnet_seed | ipaddr('address') }} {{ openvpn_server_subnet_netmask }}
+ifconfig-pool-persist ipp.txt
+
 user nobody
 group nogroup
 
+# avoid resetting connections on server restart
+persist-key
+persist-tun
+
+# current connections from clients
 status openvpn-status.log
+
+# logging settings
 log-append  /var/log/openvpn.log
-verb 3
+verb 3   # don't spam the log with *too* may messages.
+mute 10  # suppress identical messages > 10 occurrences
+
+# security negotiations
+reneg-sec 0
+script-security 1
 
 {% if openvpn_2fa_google == 'yes' %}
+client-cert-not-required
+username-as-common-name
 plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so openvpn
+{% else %}
+tls-auth keys/ta.key 0
+tls-server
+cipher AES-256-CBC
 {% endif %}

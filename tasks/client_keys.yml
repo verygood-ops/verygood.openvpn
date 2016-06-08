@@ -33,4 +33,3 @@
 
 - name: OpenVPN Client Keys | Fetch client config
   fetch: src=/etc/openvpn/{{item}}-{{cname}}.ovpn dest={{client_config_dest}}/{{item}}/{{cname}}/{{cname}}.ovpn flat=yes
-  with_items: clients

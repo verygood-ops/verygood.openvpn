@@ -14,6 +14,9 @@
 - name: Setup 2fa
   include: setup_2fa.yml
   when: openvpn_2fa_google == 'yes'
+  tags:
+    - client_keys
+    - server_keys
 
 - name: Setup server keys
   include: server_keys.yml
@@ -30,11 +33,17 @@
 
 - name: Add port rules (iptables)
   include: iptables.yml
-  when: iptables_enabled == 'yes'
+  when: openvpn_iptables_enabled == 'yes'
 
 - name: generate client configs
   include: client_keys.yml
-  when: clients
+  when: clients and openvpn_2fa_google == 'no'
+  tags:
+    - client_keys
+
+- name: generate client configs
+  include: client_keys_2fa.yml
+  when: clients and openvpn_2fa_google == 'yes'
   tags:
     - client_keys
 

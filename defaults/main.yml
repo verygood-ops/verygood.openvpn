@@ -8,7 +8,10 @@ cname: "{{ ansible_fqdn }}"
 
 # aws vpc, lan, etc
 virtual_private_cidr: "{{ ansible_default_ipv4.network | ipsubnet(16,0) }}"
-iptables_enabled: 'no'
+openvpn_iptables_enabled: 'no'
+openvpn_server_subnet_seed: >-
+  {{ ansible_default_ipv4.network | ipsubnet(28, 0) | regex_replace('\.0/28','.128') }}
+openvpn_server_subnet_netmask: "{{ ansible_default_ipv4.network | ipsubnet(28, 0) | ipaddr('netmask') }}"
 
 # clients
 clients: []
