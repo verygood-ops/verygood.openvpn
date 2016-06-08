@@ -37,15 +37,15 @@
 
 - name: generate client configs
   include: client_keys.yml
-  when: clients and openvpn_2fa_google == 'no'
+  when: clients is defined
   tags:
     - client_keys
 
-- name: generate client configs
-  include: client_keys_2fa.yml
-  when: clients and openvpn_2fa_google == 'yes'
-  tags:
-    - client_keys
+#- name: generate client configs
+#  include: client_keys_2fa.yml
+#  when: clients and openvpn_2fa_google == 'yes'
+#  tags:
+#    - client_keys
 
 - name: setup openvpn auto-start (init-style) & start
   service: name={{openvpn_service_name}} enabled=yes state=started

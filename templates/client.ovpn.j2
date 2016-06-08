@@ -9,12 +9,12 @@ persist-key
 persist-tun
 
 ca ca.crt
-
-{% if openvpn_2fa_google == 'yes' %}
-auth-user-pass
-{% else %}
 cert {{item}}.crt
 key {{item}}.key
+
+auth-user-pass
+
+{% if openvpn_2fa_google == 'no' %}
 tls-auth ta.key 1
 cipher AES-256-CBC
 remote-cert-tls server

@@ -22,6 +22,7 @@
 - name: OpenVPN Client Keys | Fetch tls-auth key
   fetch: src=/etc/openvpn/keys/ta.key dest={{client_config_dest}}/{{item}}/{{cname}}/ta.key flat=yes
   with_items: clients
+  when: openvpn_2fa_google == 'no'
 
 - name: OpenVPN Client Keys | Fetch client key
   fetch: src=/etc/openvpn/keys/{{item}}.key dest={{client_config_dest}}/{{item}}/{{cname}}/{{item}}.key flat=yes
@@ -33,3 +34,4 @@
 
 - name: OpenVPN Client Keys | Fetch client config
   fetch: src=/etc/openvpn/{{item}}-{{cname}}.ovpn dest={{client_config_dest}}/{{item}}/{{cname}}/{{cname}}.ovpn flat=yes
+  with_items: clients
