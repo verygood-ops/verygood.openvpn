@@ -5,6 +5,8 @@ openvpn_proto: udp
 openvpn_service_name: "openvpn"
 openvpn_config_file: "openvpn_{{ openvpn_proto }}_{{ openvpn_port }}"
 cname: "{{ ansible_fqdn }}"
+openvpn_backup_keys: true 
+openvpn_restore_keys: false 
 
 # aws vpc, lan, etc
 virtual_private_cidr: "{{ ansible_default_ipv4.network | ipsubnet(16,0) }}"

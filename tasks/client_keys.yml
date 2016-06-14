@@ -35,3 +35,18 @@
 - name: OpenVPN Client Keys | Fetch client config
   fetch: src=/etc/openvpn/{{item}}-{{cname}}.ovpn dest={{client_config_dest}}/{{item}}/{{cname}}/{{cname}}.ovpn flat=yes
   with_items: clients
+
+- name: OpenVPN Client Keys | copy client key to citadel bucket
+  shell: aws s3 cp /etc/openvpn/keys/{{item}}.key s3://{{citadel_bucket}}/openvpn/{{ansible_dns.search[0]}}/keys/clients/{{item}}.key --sse
+  when: '{{openvpn_backup_keys}}'
+  with_items: clients
+
+- name: OpenVPN Client Keys | copy client crt to citadel bucket
+  shell: aws s3 cp /etc/openvpn/keys/{{item}}.crt s3://{{citadel_bucket}}/openvpn/{{ansible_dns.search[0]}}/keys/clients/{{item}}.crt --sse
+  when: '{{openvpn_backup_keys}}'
+  with_items: clients
+
+- name: OpenVPN Client Keys | copy client cfg to citadel bucket
+  shell: aws s3 cp /etc/openvpn/{{item}}-{{cname}}.ovpn s3://{{citadel_bucket}}/openvpn/{{ansible_dns.search[0]}}/configs/{{item}}-{{cname}}.ovpn --sse
+  when: '{{openvpn_backup_keys}}'
+  with_items: clients

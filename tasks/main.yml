@@ -20,8 +20,16 @@
 
 - name: Setup server keys
   include: server_keys.yml
+  when: not openvpn_restore_keys
   tags:
     - server_keys
+
+- name: Restore keys
+  include: restore_keys.yml
+  when: openvpn_restore_keys
+  tags:
+    - server_keys
+    - client_keys
 
 - name: copy openvpn config file
   template: src=server.conf.j2 dest=/etc/openvpn/{{openvpn_config_file}}.conf owner=root group=root
@@ -37,7 +45,7 @@
 
 - name: generate client configs
   include: client_keys.yml
-  when: clients is defined
+  when: clients is defined and not openvpn_restore_keys
   tags:
     - client_keys
 
