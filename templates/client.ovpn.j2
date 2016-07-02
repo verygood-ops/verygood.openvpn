@@ -14,11 +14,9 @@ key {{item}}.key
 
 auth-user-pass
 
-{% if openvpn_2fa_google == 'no' %}
 tls-auth ta.key 1
 cipher AES-256-CBC
 remote-cert-tls server
-{% endif %}
 
 comp-lzo
 verb 3
