@@ -1,8 +1,8 @@
 ---
 
 # s3 module doesn't works as expected, using shell command to copy keys
-- name: copy server keys from citadel bucket
-  shell: aws s3 cp s3://{{citadel_bucket}}/openvpn/keys/server/{{item}} /etc/openvpn/keys/{{item}}
+- name: Restore keys | copy server keys from backup bucket
+  shell: aws s3 cp s3://{{backup_bucket}}{{backup_server_keys_path}}{{item}} /etc/openvpn/keys/{{item}}
   with_items:
     - ca-key.pem
     - ca.crt
@@ -11,14 +11,18 @@
     - server.crt
     - ta.key
     - dh4096.pem
+  when: bucket_server_keys.stdout_lines|length > 0
   tags:
     - server_keys
 
-- name: copy all client keys from citadel bucket
-  shell: aws s3 sync s3://{{citadel_bucket}}/openvpn/keys/clients/ /etc/openvpn/keys/
+- name: Restore keys | copy all client keys from backup bucket
+  shell: aws s3 sync s3://{{backup_bucket}}{{backup_clients_keys_path}} /etc/openvpn/keys/
+  when: bucket_clients_keys.stdout_lines|length > 0
   tags:
     - client_keys
 
-- name: copy all configs from citadel bucket
-  shell: aws s3 sync s3://{{citadel_bucket}}/openvpn/configs/ /etc/openvpn/
+- name: Restore keys | copy all configs from backup bucket
+  shell: aws s3 sync s3://{{backup_bucket}}{{backup_clients_configs_path}} /etc/openvpn/
+  when: bucket_clients_config.stdout_lines|length > 0
+  tags:
     - client_keys

@@ -18,18 +18,34 @@
     - client_keys
     - server_keys
 
-- name: Setup server keys
-  include: server_keys.yml
-  when: not openvpn_restore_keys
-  tags:
-    - server_keys
+  # checking for objects in S3. ignoring errors if objects not exists
+- name: check for server keys on S3
+  shell: aws s3 ls s3://{{backup_bucket}}{{backup_server_keys_path}}
+  ignore_errors: true
+  register: bucket_server_keys
+
+- name: check for clients keys on S3
+  shell: aws s3 ls s3://{{backup_bucket}}{{backup_clients_keys_path}}
+  ignore_errors: true
+  register: bucket_clients_keys
+
+- name: check for configs on S3
+  shell: aws s3 ls s3://{{backup_bucket}}{{backup_clients_configs_path}}
+  ignore_errors: true
+  register: bucket_clients_config
 
 - name: Restore keys
   include: restore_keys.yml
-  when: openvpn_restore_keys
+  when: not force_gen_keys 
   tags:
     - server_keys
     - client_keys
+
+- name: Setup server keys
+  include: server_keys.yml
+  when: not bucket_server_keys.stdout_lines|length > 0 or force_gen_keys
+  tags:
+    - server_keys
 
 - name: copy openvpn config file
   template: src=server.conf.j2 dest=/etc/openvpn/{{openvpn_config_file}}.conf owner=root group=root
@@ -45,15 +61,9 @@
 
 - name: generate client configs
   include: client_keys.yml
-  when: clients is defined and not openvpn_restore_keys
+  when: force_gen_keys or bucket_clients_keys.stdout_lines|length == 0
   tags:
     - client_keys
-
-#- name: generate client configs
-#  include: client_keys_2fa.yml
-#  when: clients and openvpn_2fa_google == 'yes'
-#  tags:
-#    - client_keys
 
 - name: setup openvpn auto-start (init-style) & start
   service: name={{openvpn_service_name}} enabled=yes state=started
