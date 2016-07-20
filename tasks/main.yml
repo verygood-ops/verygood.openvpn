@@ -20,30 +20,30 @@
 
   # checking for objects in S3. ignoring errors if objects not exists
 - name: check for server keys on S3
-  shell: aws s3 ls s3://{{backup_bucket}}{{backup_server_keys_path}}
+  shell: aws s3 ls s3://{{openvpn_backup_bucket}}{{openvpn_backup_server_keys_path}}
   ignore_errors: true
   register: bucket_server_keys
 
 - name: check for clients keys on S3
-  shell: aws s3 ls s3://{{backup_bucket}}{{backup_clients_keys_path}}
+  shell: aws s3 ls s3://{{openvpn_backup_bucket}}{{openvpn_backup_clients_keys_path}}
   ignore_errors: true
   register: bucket_clients_keys
 
 - name: check for configs on S3
-  shell: aws s3 ls s3://{{backup_bucket}}{{backup_clients_configs_path}}
+  shell: aws s3 ls s3://{{openvpn_backup_bucket}}{{openvpn_backup_clients_configs_path}}
   ignore_errors: true
   register: bucket_clients_config
 
 - name: Restore keys
   include: restore_keys.yml
-  when: not force_gen_keys 
+  when: not openvpn_force_gen_keys 
   tags:
     - server_keys
     - client_keys
 
 - name: Setup server keys
   include: server_keys.yml
-  when: not bucket_server_keys.stdout_lines|length > 0 or force_gen_keys
+  when: not bucket_server_keys.stdout_lines|length > 0 or openvpn_force_gen_keys
   tags:
     - server_keys
 
@@ -61,7 +61,7 @@
 
 - name: generate client configs
   include: client_keys.yml
-  when: force_gen_keys or bucket_clients_keys.stdout_lines|length == 0
+  when: openvpn_force_gen_keys or bucket_clients_keys.stdout_lines|length == 0
   tags:
     - client_keys
 

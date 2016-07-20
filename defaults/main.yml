@@ -4,15 +4,15 @@ openvpn_port: 1194
 openvpn_proto: udp
 openvpn_service_name: "openvpn"
 openvpn_config_file: "openvpn_{{ openvpn_proto }}_{{ openvpn_port }}"
-cname: "{{ ansible_fqdn }}"
+openvpn_cname: "{{ ansible_fqdn }}"
 
 # backup section
 openvpn_backup_keys: true 
-backup_bucket: '{{ citadel_bucket }}'
-backup_server_keys_path: '/openvpn/keys/server/'
-backup_clients_keys_path: '/openvpn/keys/clients/'
-backup_clients_configs_path: '/openvpn/configs/'
-force_gen_keys: false 
+openvpn_backup_bucket: '{{ citadel_bucket }}'
+openvpn_backup_server_keys_path: '/openvpn/keys/server/'
+openvpn_backup_clients_keys_path: '/openvpn/keys/clients/'
+openvpn_backup_clients_configs_path: '/openvpn/configs/'
+openvpn_force_gen_keys: false 
 
 # aws vpc, lan, etc
 virtual_private_cidr: "{{ ansible_default_ipv4.network | ipsubnet(16,0) }}"

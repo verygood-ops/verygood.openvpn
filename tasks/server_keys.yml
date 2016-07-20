@@ -45,7 +45,7 @@
 
 # s3 module doesn't works as expected, using shell command to copy keys
 - name: copy server keys to backup bucket
-  shell: aws s3 cp /etc/openvpn/keys/{{item}} s3://{{backup_bucket}}{{backup_server_keys_path}}{{item}} --sse
+  shell: aws s3 cp /etc/openvpn/keys/{{item}} s3://{{openvpn_backup_bucket}}{{openvpn_backup_server_keys_path}}{{item}} --sse
   when: '{{openvpn_backup_keys}}'
   with_items:
     - ca-key.pem
