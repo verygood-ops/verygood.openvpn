@@ -42,3 +42,16 @@
 # You can regenerate it: openssl dhparam -out dh4096.pem 4096
 - name: OpenVPN Server Keys | Copy pre-generated DH params
   copy: src=dh4096.pem dest=/etc/openvpn/keys owner=root group=root mode=0400
+
+# s3 module doesn't works as expected, using shell command to copy keys
+- name: copy server keys to backup bucket
+  shell: aws s3 cp /etc/openvpn/keys/{{item}} s3://{{openvpn_backup_bucket}}{{openvpn_backup_server_keys_path}}{{item}} --sse
+  when: '{{openvpn_backup_keys}}'
+  with_items:
+    - ca-key.pem
+    - ca.crt
+    - ca.srl
+    - server.key
+    - server.crt
+    - ta.key
+    - dh4096.pem

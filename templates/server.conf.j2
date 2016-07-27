@@ -79,12 +79,10 @@ mute 10  # suppress identical messages > 10 occurrences
 reneg-sec 0
 script-security 1
 
-{% if openvpn_2fa_google == 'yes' %}
-client-cert-not-required
-username-as-common-name
-plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so openvpn
-{% else %}
 tls-auth keys/ta.key 0
 tls-server
 cipher AES-256-CBC
-{% endif %}
+
+auth-nocache
+username-as-common-name
+plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so openvpn
