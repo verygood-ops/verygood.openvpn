@@ -1,0 +1,9 @@
+---
+
+- hosts: test_runners
+  become: yes
+  vars:
+    openvpn_force_gen_keys: true
+    openvpn_backup_keys: false
+  roles:
+    - { role: verygood.openvpn }
