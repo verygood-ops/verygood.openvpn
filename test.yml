@@ -1,6 +1,6 @@
 ---
 
-- hosts: 54.175.55.8
+- hosts: localhost
   # roles:
   #   - role: '../verygood.openvpn'
 
