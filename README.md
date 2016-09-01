@@ -8,6 +8,7 @@
 cd vagrant
 vagrant up
 cd ..
+ssh-add vagrant/.vagrant/machines/default/virtualbox/private_key
 ansible-playbook test.yml
 ```
 
