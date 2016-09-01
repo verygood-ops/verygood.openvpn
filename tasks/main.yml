@@ -27,6 +27,9 @@
 - name: install awscli
   pip: name=awscli state=present
 
+- name: install aws credentials
+  template: src=credentials.j2 dest=/root/.aws/credentials owner=root group=root
+
   # checking for objects in S3. ignoring errors if objects not exists
 - name: check for server keys on S3
   shell: aws s3 ls s3://{{openvpn_backup_bucket}}{{openvpn_backup_server_keys_path}}
