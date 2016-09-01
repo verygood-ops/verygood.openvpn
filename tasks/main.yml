@@ -18,6 +18,15 @@
     - client_keys
     - server_keys
 
+- name: install python
+  apt: name={{ item }} state=present
+  with_items:
+    - python2.7
+    - python-virtualenv
+
+- name: install awscli
+  pip: name=awscli state=present
+
   # checking for objects in S3. ignoring errors if objects not exists
 - name: check for server keys on S3
   shell: aws s3 ls s3://{{openvpn_backup_bucket}}{{openvpn_backup_server_keys_path}}
