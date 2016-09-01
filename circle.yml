@@ -1,0 +1,13 @@
+---
+machine:
+  python:
+    version: 2.7.5
+dependencies:
+  override:
+    - pip install ansible
+    - pip install setuptools --upgrade
+test:
+  override:
+    - ansible-playbook -i tests/hosts -c local tests/all.yml --syntax-check
+    # commenting out while circleci can't reach test bucket
+    #- ansible-playbook -i tests/hosts -c local tests/all.yml
