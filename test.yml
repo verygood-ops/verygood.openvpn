@@ -1,6 +1,6 @@
 ---
 
-- hosts: test 
+- hosts: default 
   # roles:
   #   - role: '../verygood.openvpn'
 
