@@ -39,21 +39,6 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   config.vm.synced_folder "../", "/ansible"
 
-  # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
-  # config.vm.provider "virtualbox" do |vb|
-  #   # Display the VirtualBox GUI when booting the machine
-  #   vb.gui = true
-  #
-  #   # Customize the amount of memory on the VM:
-  #   vb.memory = "1024"
-  # end
-  #
-  # View the documentation for the provider you are using for more
-  # information on available options.
-
   # Define a Vagrant Push strategy for pushing to Atlas. Other push strategies
   # such as FTP and Heroku are also available. See the documentation at
   # https://docs.vagrantup.com/v2/push/atlas.html for more information.
@@ -61,13 +46,10 @@ Vagrant.configure("2") do |config|
   #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
   # end
 
-  # Enable provisioning with a shell script. Additional provisioners such as
-  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-  # documentation for more information about their specific syntax and use.
   config.vm.provision "ansible" do |ansible|
     ansible.verbose = "v"
     ansible.playbook = "test.yml"
     ansible.sudo = true
-    ansible.raw_arguments = ["-e citadel_bucket=vault-staging-01-audits-01-citadel-1g2ocxmmm5rqj" , "-e aws_account=AKIAIKJVJAP3KQ73443A", "-e aws_key=ex8ney1n7aLM5p3FQcuyiU4hSLc6lBFLoOvL5Orb"]
+    ansible.raw_arguments = ["-e citadel_bucket=#{ENV['CITADEL_BUCKET']}" , "-e aws_account=#{ENV['AWS_ACCOUNT']}", "-e aws_key=#{ENV['AWS_KEY']}"]
   end
 end
