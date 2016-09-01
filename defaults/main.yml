@@ -7,6 +7,7 @@ openvpn_config_file: "openvpn_{{ openvpn_proto }}_{{ openvpn_port }}"
 openvpn_cname: "{{ ansible_fqdn }}"
 
 # backup section
+# look in infra-vault for the citadel_bucket and pass as a runtime parameter for testing
 openvpn_backup_keys: true 
 openvpn_backup_bucket: '{{ citadel_bucket }}'
 openvpn_backup_server_keys_path: '/openvpn/keys/server/'
