@@ -9,7 +9,7 @@ cd vagrant
 vagrant up
 cd ..
 ssh-add vagrant/.vagrant/machines/default/virtualbox/private_key
-ansible-playbook test.yml
+ansible-playbook -e "citadel_bucket=%d" -e "aws_account=%d" -e "aws_key=%d" test.yml --skip-tags "client_keys"
 ```
 
 ## Production
