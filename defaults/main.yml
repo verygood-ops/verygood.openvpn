@@ -1,4 +1,6 @@
 ---
+# aws defaults
+aws_region: "us-west-2"
 # defaults file for verygood.openvpn
 openvpn_port: 1194
 openvpn_proto: udp
