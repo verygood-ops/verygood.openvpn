@@ -18,3 +18,6 @@
 
     - name: do it 10.6.2.0 => + 10.6.2.128/28
       debug: msg={{ ansible_default_ipv4.network | ipsubnet(28, 0) | regex_replace('\.0/28','.128') | ipaddr('address') }}
+
+    - name: run main
+      include: tasks/main.yml
