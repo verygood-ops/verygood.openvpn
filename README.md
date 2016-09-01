@@ -2,6 +2,17 @@
 
 [![CircleCI](https://circleci.com/gh/verygood-ops/verygood.openvpn.svg?style=svg)](https://circleci.com/gh/verygood-ops/verygood.openvpn)
 
+## Development
+
+```
+cd vagrant
+vagrant up
+cd ..
+ansible-playbook test.yml
+```
+
+## Production
+
 - Uses Google 2FA
 
 
