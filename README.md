@@ -9,6 +9,7 @@ export CITADEL_BUCKET=
 export AWS_ACCOUNT=
 export AWS_KEY=
 vagrant up
+vagrant provision
 ```
 
 ## Production
