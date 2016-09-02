@@ -7,7 +7,7 @@ proto {{openvpn_proto}}
 dev tun
 keepalive 5 30
 comp-lzo
-local {{ansible_default_ipv4.address}}
+local 0.0.0.0
 
 
 # Route only requests in the 10.4.0.0/16 subnet
