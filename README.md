@@ -5,11 +5,10 @@
 ## Development
 
 ```
-cd vagrant
+export CITADEL_BUCKET=
+export AWS_ACCOUNT=
+export AWS_KEY=
 vagrant up
-cd ..
-ssh-add vagrant/.vagrant/machines/default/virtualbox/private_key
-ansible-playbook -e "citadel_bucket=%d" -e "aws_account=%d" -e "aws_key=%d" test.yml --skip-tags "client_keys"
 ```
 
 ## Production
