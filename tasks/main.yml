@@ -67,6 +67,7 @@
 
 - name: copy openvpn config file
   template: src=server.conf.j2 dest=/etc/openvpn/{{openvpn_config_file}}.conf owner=root group=root
+  when: block_size > 64
   notify:
     - restart openvpn
 

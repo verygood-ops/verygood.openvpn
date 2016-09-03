@@ -39,7 +39,7 @@ requires a default password for vagrant user. it should be `changeme` by default
 * openvpn_iptables_enabled: add iptables rules to server (string "yes" | "no")
 * openvpn_server_subnet_seed: ???
 * openvpn_server_subnet_netmask: server subnet mask (ipaddr)
-* cipher_spec: cipher suite for crypto. must be higher than defaults to mitigate sweet32 attack. (string)
+* block_size: block_size for cipher. must be higher than defaults to mitigate sweet32 attack. (string)
 
 ### clients
 * clients: array of client names (array of strings)
