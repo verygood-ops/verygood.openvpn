@@ -18,6 +18,8 @@ requires a default password for vagrant user. it should be `changeme` by default
 
 The playbook will run by default without generating any client configuration or keys. To generate keys, update the variable `clients: []` with the names of each client you wish to enable. Copy the keys $client.key, ca.crt, $client.crt, ta.key to the client system. Load configuration into tunnelblick by naming a folder containing all these files with the extension .tblk.
 
+It writes the keys to /etc/openvpn/keys by default.
+
 ## Production
 
 - Uses Google 2FA
