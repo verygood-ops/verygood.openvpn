@@ -40,6 +40,10 @@ google-authenticator
 
 A QR code will print out to your shell. Take a screen shot and save it.
 
+## Generating Client Keys
+
+The playbook will run by default without generating any client configuration or keys. To generate keys, update the variable `clients: []` with the names of each client you wish to enable. Copy the keys $client.key, ca.crt, $client.crt, ta.key to the client system. Load configuration into tunnelblick by naming a folder containing all these files with the extension .tblk.
+
 ## vars
 
 ### service defaults
@@ -71,5 +75,4 @@ A QR code will print out to your shell. Take a screen shot and save it.
 
 ### google_2fa
 * openvpn_2fa_google: enable google 2fa (string 'yes' | 'no')
-
 
