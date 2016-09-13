@@ -18,6 +18,28 @@ requires a default password for vagrant user. it should be `changeme` by default
 
 - Uses Google 2FA
 
+Two Factor auth is implemented via a combination of two PAM modules. 
+
+1. openvpn
+1. google-authenticator
+
+The first module passes local UNIX user/password auth info via `/etc/passwd` to OpenVPN as a challenge for the client application. The second module appends a TOTP substring to the client password string. This effectively enables two factors in a single authentication string. The pattern for the password is
+
+`username, unix-pass + TOTP`
+
+This mode is disabled in dev, though if you would like to enable it for testing, set the variable `openvpn_2fa_google = 'yes'`
+
+To generate a QR code for 2fa, this must be done manually for each user, since this access is infrequent and should be audited by a person prior to provisioning. The process to generate this code is simple. Log into the VPN server as root, create the new user, set the password, switch to the new user and generate the QR code.
+
+```
+useradd -m -s /bin/bash $username
+passwd $username
+su - username
+google-authenticator
+```
+
+A QR code will print out to your shell. Take a screen shot and save it.
+
 ## vars
 
 ### service defaults
@@ -48,8 +70,6 @@ requires a default password for vagrant user. it should be `changeme` by default
 * client_config_dest: name of the configuration file to write to the client
 
 ### google_2fa
-* openvpn_2fa_google: enable google 2fa (string 'yes' | 'no)
+* openvpn_2fa_google: enable google 2fa (string 'yes' | 'no')
 
-## Generating Client Keys
 
-copy the configuration from the host at /etc/openvpn/vault-admins-ip-10-8-2-146.ovpn to your client. Copy the keys vault-admins.key, ca.crt, vault-admins.crt, ta.key to the client. Load configuration into tunnelblick by naming a folder containing all these files with the extension .tblk
