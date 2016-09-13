@@ -14,6 +14,10 @@ vagrant provision
 
 requires a default password for vagrant user. it should be `changeme` by default
 
+## Generating Client Keys
+
+The playbook will run by default without generating any client configuration or keys. To generate keys, update the variable `clients: []` with the names of each client you wish to enable. Copy the keys $client.key, ca.crt, $client.crt, ta.key to the client system. Load configuration into tunnelblick by naming a folder containing all these files with the extension .tblk.
+
 ## Production
 
 - Uses Google 2FA
@@ -42,7 +46,19 @@ A QR code will print out to your shell. Take a screen shot and save it.
 
 ## Generating Client Keys
 
-The playbook will run by default without generating any client configuration or keys. To generate keys, update the variable `clients: []` with the names of each client you wish to enable. Copy the keys $client.key, ca.crt, $client.crt, ta.key to the client system. Load configuration into tunnelblick by naming a folder containing all these files with the extension .tblk.
+When run in production as part of the whole repo, client keys can be installed with the following.
+
+```
+ansible-playbook -i ${HOST}, plays/vpn.yml -s -v -u ${USER} \
+     -e 'clients=["${USER}"]' \
+     -e 'infra_env=prod' \
+     -e 'aws_account=vg' \
+     -e 'aws_region=us-east-1' \
+     -e 'client_config_dest=/tmp/client_certs/ansible'\
+     -e "openvpn_2fa_google='yes'"
+     -e "cname=${VPN_CNAME}"
+```
+
 
 ## vars
 
