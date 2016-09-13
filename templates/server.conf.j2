@@ -5,7 +5,8 @@
 port {{openvpn_port}}
 proto {{openvpn_proto}}
 dev tun
-keepalive 10 300
+keepalive 10 300 # keep connection alive by sending a regular ping packets, in our case the ping packet is sent every 10 seconds where reply packet must come within 300 seconds otherwise assume that the other endpoint is down.
+ping-timer-rem # should be used only on VPN server side where daemon started without explicit remote IP address, this way timeout starts only after VPN client connection.
 comp-lzo
 local 0.0.0.0
 
