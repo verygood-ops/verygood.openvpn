@@ -50,6 +50,6 @@ Vagrant.configure("2") do |config|
     ansible.verbose = "v"
     ansible.playbook = "test.yml"
     ansible.sudo = true
-    ansible.raw_arguments = ["-e citadel_bucket=#{ENV['CITADEL_BUCKET']}" , "-e aws_account=#{ENV['AWS_ACCOUNT']}", "-e aws_key=#{ENV['AWS_KEY']}"]
+    ansible.raw_arguments = ["-e citadel_bucket=#{ENV['CITADEL_BUCKET']}" , "-e aws_account=#{ENV['AWS_ACCOUNT']}", "-e aws_key=#{ENV['AWS_KEY']}", "-e ansible_ec2_public_ipv4=192.168.34.2"]
   end
 end

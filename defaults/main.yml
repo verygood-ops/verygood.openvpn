@@ -10,7 +10,7 @@ openvpn_cname: "{{ ansible_fqdn }}"
 
 # backup section
 # look in infra-vault for the citadel_bucket and pass as a runtime parameter for testing
-openvpn_backup_keys: true 
+openvpn_backup_keys: false 
 openvpn_backup_bucket: '{{ citadel_bucket }}'
 openvpn_backup_server_keys_path: '/openvpn/keys/server/'
 openvpn_backup_clients_keys_path: '/openvpn/keys/clients/'
@@ -26,8 +26,8 @@ openvpn_server_subnet_netmask: "{{ ansible_default_ipv4.network | ipsubnet(28, 0
 block_size: '256'
 
 # clients
-clients: []
+clients: ['test-user']
 client_config_dest: '/tmp/ansible'
 
 # google_2fa
-openvpn_2fa_google: 'no'
+openvpn_2fa_google: 'yes'
