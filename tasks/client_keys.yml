@@ -4,56 +4,56 @@
     chdir=/etc/openvpn/keys
     creates={{item}}.key
   when: clients is defined
-  with_items: clients
+  with_items: '{{clients}}'
 
 - name: OpenVPN Client Keys | Sign client key
   command: openssl x509 -req -in {{item}}.csr -out {{item}}.crt -CA ca.crt -CAkey ca-key.pem -days 3650
     chdir=/etc/openvpn/keys
     creates={{item}}.crt
   when: clients is defined
-  with_items: clients
+  with_items: '{{clients}}'
 
 - name: OpenVPN Client Keys | Generate client config
   template: src=client.ovpn.j2 dest=/etc/openvpn/{{item}}-{{openvpn_cname}}.ovpn owner=root group=root
   when: clients is defined
-  with_items: clients
+  with_items: '{{clients}}'
 
 - name: OpenVPN Client Keys | Fetch ca key
   fetch: src=/etc/openvpn/keys/ca.crt dest={{client_config_dest}}/{{item}}/{{openvpn_cname}}/ca.crt flat=yes
   when: clients is defined
-  with_items: clients
+  with_items: '{{clients}}'
 
 - name: OpenVPN Client Keys | Fetch tls-auth key
   fetch: src=/etc/openvpn/keys/ta.key dest={{client_config_dest}}/{{item}}/{{openvpn_cname}}/ta.key flat=yes
   when: clients is defined
-  with_items: clients
+  with_items: '{{clients}}'
 
 - name: OpenVPN Client Keys | Fetch client key
   fetch: src=/etc/openvpn/keys/{{item}}.key dest={{client_config_dest}}/{{item}}/{{openvpn_cname}}/{{item}}.key flat=yes
   when: clients is defined
-  with_items: clients
+  with_items: '{{clients}}'
 
 - name: OpenVPN Client Keys | Fetch client cert
   fetch: src=/etc/openvpn/keys/{{item}}.crt dest={{client_config_dest}}/{{item}}/{{openvpn_cname}}/{{item}}.crt flat=yes
   when: clients is defined
-  with_items: clients
+  with_items: '{{clients}}'
 
 - name: OpenVPN Client Keys | Fetch client config
   fetch: src=/etc/openvpn/{{item}}-{{openvpn_cname}}.ovpn dest={{client_config_dest}}/{{item}}/{{openvpn_cname}}/{{openvpn_cname}}.ovpn flat=yes
   when: clients is defined
-  with_items: clients
+  with_items: '{{clients}}'
 
 - name: OpenVPN Client Keys | copy client key to backup bucket
   shell: aws s3 cp /etc/openvpn/keys/{{item}}.key s3://{{openvpn_backup_bucket}}{{openvpn_backup_server_keys_path}}{{item}}.key --sse
   when: clients is defined and openvpn_backup_keys
-  with_items: clients
+  with_items: '{{clients}}'
 
 - name: OpenVPN Client Keys | copy client crt to backup bucket
   shell: aws s3 cp /etc/openvpn/keys/{{item}}.crt s3://{{openvpn_backup_bucket}}{{openvpn_backup_clients_keys_path}}{{item}}.crt --sse
   when: clients is defined and openvpn_backup_keys
-  with_items: clients
+  with_items: '{{clients}}'
 
 - name: OpenVPN Client Keys | copy client cfg to backup bucket
   shell: aws s3 cp /etc/openvpn/{{item}}-{{openvpn_cname}}.ovpn s3://{{openvpn_backup_bucket}}{{openvpn_backup_clients_configs_path}}{{item}}-{{openvpn_cname}}.ovpn --sse
   when: clients is defined and openvpn_backup_keys
-  with_items: clients
+  with_items: '{{clients}}'
