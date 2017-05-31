@@ -32,6 +32,7 @@
 
 - name: install aws credentials
   template: src=credentials.j2 dest=/root/.aws/credentials owner=root group=root
+  when: aws_key is defined
 
   # checking for objects in S3. ignoring errors if objects not exists
 - name: check for server keys on S3
