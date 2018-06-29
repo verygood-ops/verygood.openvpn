@@ -1,8 +1,8 @@
 pip-install: &pip-install
   name: Install pip modules
   command: |
-    pip install setuptools --upgrade
-    pip install ansible==2.2.0
+    sudo pip install setuptools --upgrade
+    sudo pip install ansible==2.2.0
 
 ansible-syntax-check: &ansible-syntax-check
   name: ansible plays syntax check
