@@ -4,6 +4,11 @@ pip-install: &pip-install
     pip install setuptools --upgrade
     pip install ansible==2.2.0
 
+ansible-syntax-check: &ansible-syntax-check
+  name: ansible plays syntax check
+  command: |
+    ansible-playbook -i tests/hosts -c local tests/all.yml --syntax-check
+
 version: 2
 jobs:
   build:
@@ -11,4 +16,5 @@ jobs:
       - image: circleci/python:3.6 
     steps:
       - checkout
-      - ansible-playbook -i tests/hosts -c local tests/all.yml --syntax-check
+      - run: *pip-install
+      - run: *ansible-syntax-check
