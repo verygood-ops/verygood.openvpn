@@ -4,8 +4,8 @@ machine:
     version: 2.7.5
 dependencies:
   override:
-    - pip install ansible==2.2.0
     - pip install setuptools --upgrade
+    - pip install ansible==2.2.0
 test:
   override:
     - ansible-playbook -i tests/hosts -c local tests/all.yml --syntax-check
