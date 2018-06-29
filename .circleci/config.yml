@@ -1,0 +1,20 @@
+pip-install: &pip-install
+  name: Install pip modules
+  command: |
+    sudo pip install setuptools --upgrade
+    sudo pip install ansible==2.2.0
+
+ansible-syntax-check: &ansible-syntax-check
+  name: ansible plays syntax check
+  command: |
+    ansible-playbook -i tests/hosts -c local tests/all.yml --syntax-check
+
+version: 2
+jobs:
+  build:
+    docker: # See https://docs.docker.com/get-started/#docker-concepts if you are new to Docker.
+      - image: circleci/python:3.6 
+    steps:
+      - checkout
+      - run: *pip-install
+      - run: *ansible-syntax-check
