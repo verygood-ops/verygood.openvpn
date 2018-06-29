@@ -57,7 +57,7 @@ dh       keys/dh4096.pem
 #
 # I used this: http://www.subnet-calculator.com/cidr.php
 # to help calculate this.
-server {{ ansible_default_ipv4.address }} {{ openvpn_server_subnet_netmask }}
+server {{ ansible_default_ipv4.address }} {{ ansible_default_ipv4.netmask }}
 ifconfig-pool-persist ipp.txt
 
 user nobody
