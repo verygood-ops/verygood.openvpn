@@ -4,6 +4,16 @@ pip-install: &pip-install
     sudo pip install setuptools --upgrade
     sudo pip install ansible==2.2.0
 
+bundle-install: &bundle-install
+  name: Install ruby modules
+  command: |
+    bundle install
+
+kitchen-test: &kitchen-test
+  name: Install pip modules
+  command: |
+    kitchen test
+
 ansible-syntax-check: &ansible-syntax-check
   name: ansible plays syntax check
   command: |
@@ -13,8 +23,8 @@ version: 2
 jobs:
   build:
     docker: # See https://docs.docker.com/get-started/#docker-concepts if you are new to Docker.
-      - image: circleci/python:3.6 
+      - image: ruby:2.3
     steps:
       - checkout
-      - run: *pip-install
-      - run: *ansible-syntax-check
+      - run: *bundle-install
+      - run: *kitchen-test
