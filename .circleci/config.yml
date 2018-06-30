@@ -22,11 +22,12 @@ ansible-syntax-check: &ansible-syntax-check
 version: 2
 jobs:
   build:
-    docker: # See https://docs.docker.com/get-started/#docker-concepts if you are new to Docker.
-      - image: ruby:2.3
+    #docker: # See https://docs.docker.com/get-started/#docker-concepts if you are new to Docker.
+    #  - image: ruby:2.3
+    machine: true
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
+      #- setup_remote_docker:
+      #    docker_layer_caching: true
       - run: *bundle-install
       - run: *kitchen-test
