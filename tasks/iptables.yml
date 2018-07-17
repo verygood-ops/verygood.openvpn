@@ -7,9 +7,10 @@
   changed_when: false  # Never report as changed
 
 - name: OpenVPN IPTables | Allow VPN forwarding
-  shell: /sbin/iptables -A FORWARD -s {{ virtual_private_cidr }} -j ACCEPT -m comment --comment "Allow VPN forwarding"
+  shell: /sbin/iptables -A FORWARD -s '{{ item }}' -j ACCEPT -m comment --comment "Allow VPN forwarding for {{ item }}""
   become: true
-  when: iptablesrules.stdout.find("Allow VPN forwarding") == -1
+  when: iptablesrules.stdout.find("Allow VPN forwarding for {{ item }}") == -1
+  with_items: '{{virtual_private_cidrs}}'
 
 - name: OpenVPN IPTables | Allow incoming VPN connection
   shell: /sbin/iptables -A INPUT -p {{openvpn_proto}} --dport {{openvpn_port}} -j ACCEPT -m comment --comment "Allow incoming VPN"
@@ -35,9 +36,10 @@
 #  when: ipnattablesrules.stdout.find("Perform NAT readdressing") == -1
 
 - name: OpenVPN IPTables | Perform NAT readdressing
-  shell: /sbin/iptables -t nat -A POSTROUTING -s {{ virtual_private_cidr }} -o eth0 -j MASQUERADE -m comment --comment "Perform NAT readdressing"
+  shell: /sbin/iptables -t nat -A POSTROUTING -s '{{ item }}' -o eth0 -j MASQUERADE -m comment --comment "Perform NAT readdressing for {{ item }}"
   become: true
-  when: ipnattablesrules.stdout.find("Perform NAT readdressing") == -1
+  when: ipnattablesrules.stdout.find("Perform NAT readdressing for {{ item }}") == -1
+  with_items: '{{ virtual_private_cidrs }}'
 
 - name: OpenVPN IPTables | Persist everything
   command: /etc/init.d/iptables-persistent save

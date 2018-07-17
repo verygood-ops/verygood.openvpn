@@ -18,7 +18,9 @@ local {{ansible_default_ipv4.address}}
 # private subnets will also need
 # to know to route the OpenVPN client
 # address pool back to the OpenVPN server.
-push "route {{ virtual_private_cidr | ipaddr('network') }} 255.255.0.0"
+{% for cidr in virtual_private_cidrs -%}
+push "route {{ cidr | ipaddr('network') }} 255.255.0.0"
+{% endfor -%}
 
 # push "redirect-gateway def1 bypass-dhcp"
 # push "dhcp-option DNS 208.67.222.222"
