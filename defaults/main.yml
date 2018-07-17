@@ -10,15 +10,16 @@ openvpn_cname: "{{ ansible_fqdn }}"
 
 # backup section
 # look in infra-vault for the citadel_bucket and pass as a runtime parameter for testing
-openvpn_backup_keys: true 
+openvpn_backup_keys: true
 openvpn_backup_bucket: '{{ citadel_bucket }}'
 openvpn_backup_server_keys_path: '/openvpn/keys/server/'
 openvpn_backup_clients_keys_path: '/openvpn/keys/clients/'
 openvpn_backup_clients_configs_path: '/openvpn/configs/'
-openvpn_force_gen_keys: false 
+openvpn_force_gen_keys: false
 
 # aws vpc, lan, etc
-virtual_private_cidr: "{{ ansible_default_ipv4.network | ipsubnet(16,0) }}"
+virtual_private_cidrs:
+  - "{{ ansible_default_ipv4.network | ipsubnet(16,0) }}"
 openvpn_iptables_enabled: 'no'
 
 # clients
