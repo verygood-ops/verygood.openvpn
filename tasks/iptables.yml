@@ -7,7 +7,7 @@
   changed_when: false  # Never report as changed
 
 - name: OpenVPN IPTables | Allow VPN forwarding
-  shell: /sbin/iptables -A FORWARD -s '{{ item }}' -j ACCEPT -m comment --comment "Allow VPN forwarding for {{ item }}""
+  shell: /sbin/iptables -A FORWARD -s {{ item }} -j ACCEPT -m comment --comment "Allow VPN forwarding for {{ item }}"
   become: true
   when: iptablesrules.stdout.find("Allow VPN forwarding for {{ item }}") == -1
   with_items: '{{virtual_private_cidrs}}'
@@ -36,7 +36,7 @@
 #  when: ipnattablesrules.stdout.find("Perform NAT readdressing") == -1
 
 - name: OpenVPN IPTables | Perform NAT readdressing
-  shell: /sbin/iptables -t nat -A POSTROUTING -s '{{ item }}' -o eth0 -j MASQUERADE -m comment --comment "Perform NAT readdressing for {{ item }}"
+  shell: /sbin/iptables -t nat -A POSTROUTING -s {{ item }} -o eth0 -j MASQUERADE -m comment --comment "Perform NAT readdressing for {{ item }}"
   become: true
   when: ipnattablesrules.stdout.find("Perform NAT readdressing for {{ item }}") == -1
   with_items: '{{ virtual_private_cidrs }}'
