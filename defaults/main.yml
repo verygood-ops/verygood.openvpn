@@ -20,7 +20,7 @@ openvpn_force_gen_keys: false
 # aws vpc, lan, etc
 virtual_private_cidrs:
   - "{{ ansible_default_ipv4.network | ipsubnet(16,0) }}"
-openvpn_iptables_enabled: 'no'
+openvpn_iptables_enabled: 'yes'
 
 # clients
 clients: []
