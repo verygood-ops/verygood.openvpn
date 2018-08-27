@@ -3,7 +3,7 @@
 - name: OpenVPN IPTables | Get iptables rules
   shell: iptables -L
   register: iptablesrules
-  always_run: yes
+  check_mode: no
   changed_when: false  # Never report as changed
 
 - name: OpenVPN IPTables | Allow VPN forwarding
@@ -25,7 +25,7 @@
 - name: OpenVPN IPTables | Get iptables nat table rules
   shell: iptables -L -t nat
   register: ipnattablesrules
-  always_run: yes
+  check_mode: no
   changed_when: false  # Never report as changed
 
 # If you want to choose what IP address to NAT as, you can uncomment the below
