@@ -32,3 +32,6 @@ openvpn_2fa_google: 'no'
 openvpn_version: 'release/2.4'
 openvpn_apt_key_url: 'https://swupdate.openvpn.net/repos/repo-public.gpg'
 openvpn_apt_repo_url: 'http://build.openvpn.net/debian/openvpn/'
+
+openvpn_server_subnet_seed: >-
+  {{ ansible_default_ipv4.network | ipsubnet(16,0) | ipsubnet(24, 240) | regex_replace('\.0/24','.0') }}
