@@ -1,6 +1,15 @@
 ---
 # tasks file for openvpn
 
+- name: Adding APT key
+  apt_key:
+    url: '{{openvpn_apt_key_url}}'
+
+- name: Add APT repo
+  apt_repository:
+    repo: "deb {{openvpn_apt_repo_url}}{{openvpn_version}} {{ansible_distribution_release}} main"
+    update_cache: yes
+
 - name: install openvpn
   apt: name={{ item }} state=present
   with_items:
@@ -52,7 +61,7 @@
 
 - name: Restore keys
   include: restore_keys.yml
-  when: not openvpn_force_gen_keys 
+  when: not openvpn_force_gen_keys
   tags:
     - server_keys
     - client_keys
