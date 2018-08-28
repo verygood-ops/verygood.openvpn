@@ -2,8 +2,9 @@
 # tasks file for openvpn
 
 - name: Adding APT key
-  apt_key:
-    url: '{{openvpn_apt_key_url}}'
+  shell: "wget -O - {{openvpn_apt_key_url}} | apt-key add -"
+  # apt_key:
+  #   url: '{{openvpn_apt_key_url}}'
 
 - name: Add APT repo
   apt_repository:
