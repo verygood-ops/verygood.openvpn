@@ -2,7 +2,7 @@
 # tasks file for openvpn
 
 - name: Adding APT key
-  shell: wget -O - https://swupdate.openvpn.net/repos/repo-public.gpg|apt-key add -
+  shell: "wget -O - {{openvpn_apt_key_url}} | apt-key add -"
   # apt_key:
   #   url: '{{openvpn_apt_key_url}}'
 
