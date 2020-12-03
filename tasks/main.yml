@@ -16,7 +16,7 @@
   with_items:
     - openvpn
     - easy-rsa
-    - iptables-persistent
+    - netfilter-persistent
 
 - name: Ensure group 'nogroup' is present
   group: name=nogroup state=present
