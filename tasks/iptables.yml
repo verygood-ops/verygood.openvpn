@@ -42,4 +42,4 @@
   with_items: '{{ virtual_private_cidrs }}'
 
 - name: OpenVPN IPTables | Persist everything
-  command: /etc/init.d/iptables-persistent save
+  command: /etc/init.d/netfilter-persistent save
