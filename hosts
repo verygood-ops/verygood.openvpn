@@ -1,2 +1,0 @@
-[test]
-localhost ansible_user=vagrant ansible_port=2222 ansible_become=true
