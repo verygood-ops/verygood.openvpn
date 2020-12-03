@@ -28,15 +28,6 @@
     - client_keys
     - server_keys
 
-- name: install python
-  apt: name={{ item }} state=present
-  with_items:
-    - python2.7
-    - python-virtualenv
-
-- name: install awscli
-  pip: name=awscli state=present
-
 - name: create awscli cred directory
   file: path=/root/.aws state=directory mode=0700
 
