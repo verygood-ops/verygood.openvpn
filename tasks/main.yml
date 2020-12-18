@@ -33,6 +33,9 @@
 - name: create awscli cred directory
   file: path=/root/.aws state=directory mode=0700
 
+- name: create dir for pidfile (hardcoded into startup scripts)
+  file: path=/run/openvpn/ state=directory mode=0700
+
 - name: install aws credentials
   template: src=credentials.j2 dest=/root/.aws/credentials owner=root group=root
   when: aws_key is defined

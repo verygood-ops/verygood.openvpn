@@ -36,7 +36,7 @@
 #  when: ipnattablesrules.stdout.find("Perform NAT readdressing") == -1
 
 - name: OpenVPN IPTables | Perform NAT readdressing
-  shell: /sbin/iptables -t nat -A POSTROUTING -s {{ item }} -o eth0 -j MASQUERADE -m comment --comment "Perform NAT readdressing for {{ item }}"
+  shell: /sbin/iptables -t nat -A POSTROUTING -s {{ item }} -o ens5 -j MASQUERADE -m comment --comment "Perform NAT readdressing for {{ item }}"
   become: true
   when: ipnattablesrules.stdout.find("Perform NAT readdressing for {{ item }}") == -1
   with_items: '{{ virtual_private_cidrs }}'
