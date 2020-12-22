@@ -86,7 +86,7 @@
     state: stopped
     enabled: yes
     daemon_reload: yes
-    name: {{openvpn_service_name}}
+    name: "{{openvpn_service_name}}"
 
 - name: copy openvpn config file
   template: src=server.conf.j2 dest=/etc/openvpn/{{openvpn_config_file}}.conf owner=root group=root
@@ -109,4 +109,4 @@
 - name: restart openvpn
   systemd:
     state: restarted
-    name: {{openvpn_service_name}}
+    name: "{{openvpn_service_name}}"
