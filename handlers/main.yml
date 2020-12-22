@@ -1,9 +1,16 @@
 ---
 - name: enable openvpn
-  service: name="{{openvpn_service_name}}" enabled=yes
+  systemd:
+    enabled: yes
+    daemon_reload: yes
+    name: {{openvpn_service_name}}
 
 - name: start openvpn
-  service: name="{{openvpn_service_name}}" state=started
+  systemd:
+    state: started
+    name: {{openvpn_service_name}}
 
 - name: restart openvpn
-  service: name="{{openvpn_service_name}}" state=restarted
+  systemd:
+    state: restarted
+    name: {{openvpn_service_name}}
