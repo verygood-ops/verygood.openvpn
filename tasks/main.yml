@@ -81,8 +81,12 @@
   tags:
     - server_keys
 
-- name: setup openvpn auto-start (init-style) & start
-  service: name={{openvpn_service_name}} enabled=yes state=stopped
+- name: enable openvpn service
+  systemd:
+    state: stopped
+    enabled: yes
+    daemon_reload: yes
+    name: {{openvpn_service_name}}
 
 - name: copy openvpn config file
   template: src=server.conf.j2 dest=/etc/openvpn/{{openvpn_config_file}}.conf owner=root group=root
@@ -103,4 +107,6 @@
     - client_keys
 
 - name: restart openvpn
-  service: name={{openvpn_service_name}} state=restarted
+  systemd:
+    state: restarted
+    name: {{openvpn_service_name}}
