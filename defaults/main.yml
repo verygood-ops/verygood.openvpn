@@ -24,6 +24,7 @@ block_size: '256'
 virtual_private_cidrs:
   - "{{ ansible_default_ipv4.network | ipsubnet(16,0) }}"
 openvpn_iptables_enabled: 'yes'
+openvpn_interface: eth0
 
 # clients
 clients: []

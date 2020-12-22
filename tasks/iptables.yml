@@ -35,10 +35,17 @@
 #  become: true
 #  when: ipnattablesrules.stdout.find("Perform NAT readdressing") == -1
 
+  # ugly hack
+  # todo: add flexibility
+- name: support ensX interface names
+  set_fact:
+    openvpn_interface: ens5
+  when: '"ens5" in ansible_interfaces'
+
 - name: OpenVPN IPTables | Perform NAT readdressing
-  shell: /sbin/iptables -t nat -A POSTROUTING -s {{ item }} -o ens5 -j MASQUERADE -m comment --comment "Perform NAT readdressing for {{ item }}"
+  shell: /sbin/iptables -t nat -A POSTROUTING -s {{ item }} -o {{ openvpn_interface }} -j MASQUERADE -m comment --comment "Perform NAT readdressing for {{ item }} on interface {{ openvpn_interface }}"
   become: true
-  when: ipnattablesrules.stdout.find("Perform NAT readdressing for {{ item }}") == -1
+  when: ipnattablesrules.stdout.find("Perform NAT readdressing for {{ item }} on interface {{ openvpn_interface }}") == -1
   with_items: '{{ virtual_private_cidrs }}'
 
 - name: OpenVPN IPTables | Persist everything
