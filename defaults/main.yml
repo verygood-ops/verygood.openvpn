@@ -16,6 +16,7 @@ openvpn_backup_server_keys_path: '/openvpn/keys/server/'
 openvpn_backup_clients_keys_path: '/openvpn/keys/clients/'
 openvpn_backup_clients_configs_path: '/openvpn/configs/'
 openvpn_force_gen_keys: false
+openvpn_gen_dh_params: false
 
 block_size: '256'
 

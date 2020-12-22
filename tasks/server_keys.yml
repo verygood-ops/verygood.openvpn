@@ -42,6 +42,19 @@
 # You can regenerate it: openssl dhparam -out dh4096.pem 4096
 - name: OpenVPN Server Keys | Copy pre-generated DH params
   copy: src=dh4096.pem dest=/etc/openvpn/keys owner=root group=root mode=0400
+  when: not openvpn_gen_dh_params
+
+- name: OpenVPN Server Keys | Generate DH params
+  shell: openssl dhparam -out /etc/openvpn/keys/dh4096.pem 4096
+  when: openvpn_gen_dh_params
+
+- name: OpenVPN Server Keys | Change DH params file ownership
+  file:
+    path: /etc/openvpn/keys/dh4096.pem
+    owner: root
+    group: root
+    mode: '0400'
+  when: openvpn_gen_dh_params
 
 - name: OpenVPN Server Keys | Change file ownerships
   file:
@@ -56,7 +69,6 @@
     - server.key
     - server.crt
     - ta.key
-    - dh4096.pem
 
 # s3 module doesn't works as expected, using shell command to copy keys
 - name: copy server keys to backup bucket
