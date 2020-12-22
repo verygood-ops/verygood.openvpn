@@ -81,7 +81,7 @@
   tags:
     - server_keys
 
-- name: setup openvpn auto-start (init-style) & start
+- name: enable openvpn service
   systemd:
     state: stopped
     enabled: yes
