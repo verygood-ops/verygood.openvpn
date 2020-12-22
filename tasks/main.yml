@@ -23,6 +23,18 @@
 - name: Ensure group 'nogroup' is present
   group: name=nogroup state=present
 
+  # hack: https://github.com/google/google-authenticator-libpam/issues/98#issuecomment-420685532
+- name: openvpn service - no homedir protection
+  lineinfile:
+    line='ProtectHome=false'
+    dest='/lib/systemd/system/openvpn@.service'
+    regexp='^ProtectHome=true'
+# - name: openvpn service - CapabilityBoundingSet
+#   lineinfile:
+#     line='CapabilityBoundingSet=CAP_IPC_LOCK CAP_NET_ADMIN CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_SETGID CAP_SETUID CAP_SYS_CHROOT CAP_DAC_OVERRIDE CAP_AUDIT_WRITE'
+#     dest='/lib/systemd/system/openvpn@.service'
+#     regexp='^CapabilityBoundingSet='
+
 - name: Setup 2fa
   include: setup_2fa.yml
   when: openvpn_2fa_google == 'yes'
