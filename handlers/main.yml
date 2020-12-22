@@ -3,14 +3,14 @@
   systemd:
     enabled: yes
     daemon_reload: yes
-    name: {{openvpn_service_name}}
+    name: "{{openvpn_service_name}}"
 
 - name: start openvpn
   systemd:
     state: started
-    name: {{openvpn_service_name}}
+    name: "{{openvpn_service_name}}"
 
 - name: restart openvpn
   systemd:
     state: restarted
-    name: {{openvpn_service_name}}
+    name: "{{openvpn_service_name}}"
